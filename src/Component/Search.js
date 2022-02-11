@@ -1,53 +1,49 @@
 import React from "react";
-
+import Fuse from 'fuse.js'
 import { useState } from "react";
 
-import Book_Data from '../Book_data.json'
+import Books from '../Book_data.json'
 export default function Search() {
-    const [searchTerm, setSearchTerm] = useState("");
-    const books=[
-        {
-            "key":1,
-            "name":"aba",
-            "author":"dhruv",
-            "publication":"abcd",
-        },
-        {
-            "key":2,
-            "name":"kjhfvjfd",
-            "author":"iikmuhmujm",
-            "publication":"gfadsr",
-        },
-        {
-          "key":2,
-          "name":"abad",
-          "author":"kak",
-          "publication":"hshsg",
-      }
-
-    ]
-  return (
+    const [searchTerm, setSearchTerm] = useState('');
+    const fuse=new Fuse(Books,  {
+      keys: [
+        'name',
+        'author'],
+        includeScore:true
+    })
+    const results=fuse.search(searchTerm);
+    console.log(results);
+    const BookResult=searchTerm?results.map(result=>result.item):Books;
+    return (
       <div>
-          <input 
+        <div className="container">
+          <p><b>Search </b>
+          <input className="mx-3"
             type="text"
             placeholder="Search ..."
             onChange={(event) => setSearchTerm(event.target.value)}
-          />
-{books.filter((val) => {
-        if (searchTerm === "") {
-          return val;
-        } else if (
-          val.name.toLowerCase().includes(searchTerm.toLowerCase())
-        ) {
-          return val;
-        }
-      }).map((val) => {
+          /> </p></div>
+      <table className="table container my-4">
+        <thead>
+        <tr>
+      <th scope="col">Serial No.</th>
+      <th scope="col">First</th>
+      <th scope="col">Last</th>
+      <th scope="col">Handle</th>
+      </tr>
+        </thead><tbody>
+      {BookResult.map((val) => {
         return (
-          <div className="BookData">
-            <p>{val.name}</p>
-          </div>
+          
+          <tr key={val.key}>
+            <td>{val.key}</td>
+            <td>{val.name}</td>
+            <td>{val.author}</td>
+            <td>{val.publication}</td>
+          </tr>
         );
-      })}
+      })
+    }</tbody></table>
     </div>
   );
 }
