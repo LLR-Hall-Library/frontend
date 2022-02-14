@@ -1,6 +1,6 @@
 ### Deployment URL
 
-[View Deployment](https://llr-library.netify.app/)
+[View Deployment](https://llr-library.netlify.app/)
 
 # Getting Started with Create React App
 
